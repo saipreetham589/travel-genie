@@ -1,3 +1,3 @@
 # travel-genie
 Revolutionizing the way you travel
-###Ⓒ All Rights Reserved
+### Ⓒ All Rights Reserved
