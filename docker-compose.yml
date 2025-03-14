@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  node-backend:
+    build: ./backend-node
+    ports:
+      - "5050:5000"
+    depends_on:
+      - python-backend
+
+  python-backend:
+    build: ./backend-python
+    ports:
+      - "8080:8000"
