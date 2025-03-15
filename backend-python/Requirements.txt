@@ -1,2 +1,8 @@
-fastapi
-uvicorn
+fastapi==0.95.2
+uvicorn[gunicorn]==0.18.3
+psycopg2-binary
+sqlalchemy
+pydantic
+alembic
+python-dotenv
+passlib[bcrypt]

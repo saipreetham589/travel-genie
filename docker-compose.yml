@@ -1,14 +1,49 @@
 version: "3.8"
-
 services:
-  node-backend:
-    build: ./backend-node
+  travelgenie-db:
+    image: postgres:13
+    container_name: travelgenie-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: travelgenie
+    volumes:
+      - travelgenie-db-data:/var/lib/postgresql/data
+    networks:
+      - travel-genie-network
     ports:
-      - "5050:5000"
-    depends_on:
-      - python-backend
+      - "5432:5432"  # Exposing PostgreSQL port 5432
 
-  python-backend:
-    build: ./backend-python
+  travel-genie-python-backend:
+    build:
+      context: ./backend-python  # Path to your Python backend
+    container_name: travel-genie-python-backend
+    environment:
+      - DATABASE_URL=postgres://postgres:example@travelgenie-db:5432/travelgenie
+    networks:
+      - travel-genie-network
     ports:
-      - "8080:8000"
+      - "8000:8000"  # Exposing Python backend on port 8000
+    depends_on:
+      - travelgenie-db
+    volumes:
+      - ./backend-python:/app  # Mount the backend directory
+
+  travel-genie-node-backend:
+    build:
+      context: ./backend-node  # Correct path to your Node.js backend
+    container_name: travel-genie-node-backend
+    networks:
+      - travel-genie-network
+    ports:
+      - "5000:5000"  # Exposing Node.js backend on port 5000
+    depends_on:
+      - travelgenie-db
+
+networks:
+  travel-genie-network:
+    driver: bridge
+
+volumes:
+  travelgenie-db-data:
+    driver: local
